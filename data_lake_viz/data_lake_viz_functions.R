@@ -1,5 +1,6 @@
 library(tidyverse)
 library(gridExtra)
+options(warn=-1)
 
 # Publication-quality ggplot2 theme found online at `https://rpubs.com/Koundy/71792`
 
@@ -417,14 +418,14 @@ import_nobin_data = function(fileString="", binSize=40, reverse=FALSE, prepare_f
     colnames(omim_raw_2014) = c("omim_gene_2014_raw", "genes", "omim_id", "cyto_band", "gene_symbol")
     omim_raw_2014$gene_symbol = gsub(",", "",omim_raw_2014$gene_symbol)
     omim_2014 = select(omim_raw_2014, gene_symbol, omim_gene_2014_raw) %>% group_by(gene_symbol) %>% summarise(omim_gene_2014=paste(omim_gene_2014_raw, collapse=","))
-    nobin = nobin %>% left_join(omim_2014)
+    nobin = nobin %>% left_join(omim_2014, by = "gene_symbol")
     
     # Import 2013 OMIM, annotate, calculate discovery bool
     omim_raw_2013 = read.table("omim/omim_flat_02_07_2013_noheader.txt", header=FALSE, sep="|", quote = "", comment.char = "")
     colnames(omim_raw_2013) = c("omim_gene_2013_raw", "genes", "omim_id", "cyto_band", "gene_symbol")
     omim_raw_2013$gene_symbol = gsub(",", "",omim_raw_2013$gene_symbol)
     omim_2013 = select(omim_raw_2013, c("gene_symbol", "omim_gene_2013_raw")) %>% group_by(gene_symbol) %>% summarise(omim_gene_2013=paste(omim_gene_2013_raw, collapse=","))
-    nobin = nobin %>% left_join(omim_2013)
+    nobin = nobin %>% left_join(omim_2013, by = "gene_symbol")
     
     # calculate discovery bools
     nobin$discovery_2013to2014 = (is.na(nobin$omim_gene_2013) & !is.na(nobin$omim_gene_2014))
