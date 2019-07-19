@@ -1,4 +1,4 @@
-# HARLEE_discovery
+# HARLEE_analysis
 
 This repository contains the scripts and intermediate data files utilized in the manuscript "A Genocentric Approach to Discovery of Mendelian Disease Genes".
 
